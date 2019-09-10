@@ -1,5 +1,9 @@
 # Nagios checks for FreeBSD jails
 
+The `pkg-base-audit.sh` script requires [security/base-audit](https://www.freshports.org/security/base-audit/)
+
+`pkg-audit.sh` requires [ports-mgmt/pkg](https://www.freshports.org/ports-mgmt/pkg/), which should be on every system using `pkg`.
+
 I used these settings in `/etc/periodic.conf`:
 
 ```
