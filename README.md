@@ -1,38 +1,40 @@
-# freebsd-nagios-jail
+# Nagios checks for FreeBSD jails
 
-Nagios checks for FreeBSD jails
+I used these settings in `/etc/periodic.conf`:
 
-I used these settings in /etc/periodic.conf:
-
+```
 # for security/405.pkg-base-audit
 security_status_baseaudit_enable="YES"
 security_status_baseaudit_jails="*"
 
-#for 410.pkg-audit
+# for 410.pkg-audit
 security_status_pkgaudit_expiry=1
 
 # for many scripts including 405 & 410
 pkg_jails='*'
+```
 
-I install those script at:
+I install `pkg-audit.sh` and `pkg-base-audit.sh` at `/usr/local/libexec/nagios-custom`
 
-  /usr/local/libexec/nagios-custom
+I add these entries to `/usr/local/etc/nrpe.cfg`
 
-I add these entries to /usr/local/etc/nrpe.cfg
-
+```
 $ grep audit /usr/local/etc/nrpe.cfg
 command[check_pkg_audit]    =/usr/local/bin/sudo /usr/local/libexec/nagios-custom/pkg-audit.sh
 command[check_base_audit]   =/usr/local/bin/sudo /usr/local/libexec/nagios-custom/pkg-base-audit.sh
+```
 
+I add these entries via `sudo`:
 
-I add these entries via sudo:
-
+```
 $ sudo grep audit /usr/local/etc/sudoers
 nagios   ALL=(ALL) NOPASSWD:/usr/local/libexec/nagios-custom/pkg-audit.sh
 nagios   ALL=(ALL) NOPASSWD:/usr/local/libexec/nagios-custom/pkg-base-audit.sh
+```
 
-These services are defined in /usr/local/etc/services.cfg
+These services are defined in `/usr/local/etc/services.cfg`:
 
+```
 define service {
         #NAGIOSQL_CONFIG_NAME           FreeBSD_Server
         hostgroup_name                  FreeBSD Server
@@ -46,7 +48,6 @@ define service {
         register                        1
 }
 
-
 define service {
         #NAGIOSQL_CONFIG_NAME           FreeBSD_Server
         hostgroup_name                  FreeBSD Server
@@ -59,3 +60,4 @@ define service {
         contact_groups                  admins
         register                        1
 }
+```
